@@ -1,0 +1,15 @@
+<ion-content>
+  <div class="media-container">
+    <div *ngFor="let media of mediaFiles" class="media-box" (click)="selectMedia(media)">
+      <img *ngIf="media.type === 'image'"  [src]="media.src" />
+      <video *ngIf="media.type === 'videos'" [src]="media.src" muted></video>
+    </div>
+  </div>
+
+  <div class="overlay" *ngIf="selectedMedia" (click)="closeMedia()">
+    <div class="media-enlarged" (click)="$event.stopPropagation()">
+      <img *ngIf="selectedMedia.type === 'image'" [src]="selectedMedia.src" />
+      <video *ngIf="selectedMedia.type === 'video'" [src]="selectedMedia.src" controls autoplay></video>
+    </div>
+  </div>
+</ion-content>

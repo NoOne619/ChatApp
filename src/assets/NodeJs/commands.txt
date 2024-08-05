@@ -1,0 +1,81 @@
+npm init
+"scripts": {//write in the package.json file
+    "dev":"nodemon index.js",
+    "start":"node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+npm i express nodemon cors mysql mysql2
+npm run dev
+
+
+
+
+
+const connect = require("../db/connection")
+
+const GetUserData = async (req, res) => {
+    console.log("Test")
+    const sql = "SELECT * FROM `students`";
+    connect.query(sql, (err, result) => {
+
+        res.status(200).json(result);
+    })
+}
+
+
+const PostUserData = (req, res) => {
+    const { CourseID, TeacherID, Semester, Year } = req.body;
+
+
+    const sql = "INSERT INTO `classes` (`CourseID`, `TeacherID`, `Semester`, `Year`) VALUES (?, ?, ?, ?)";
+    const values = [CourseID, TeacherID, Semester, Year];
+    console.log(values);
+    connect.query(sql, values, (err, result) => {
+        if (err) {
+            console.error('Error inserting data:', err);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+        res.status(200).json({ message: 'Data inserted successfully', insertedID: result.insertId });
+    });
+};
+
+const DeleteData = (req, res) => {
+    const classID = req.params.classID; // Assuming classID is passed as a route parameter
+
+    const sql = "DELETE FROM `classes` WHERE classID = ?";
+    const values = [classID];
+
+    connect.query(sql, values, (err, result) => {
+        if (err) {
+            console.error('Error deleting class:', err);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Class not found' });
+        }
+
+        res.status(200).json({ message: 'Class deleted successfully' });
+    });
+};
+const UpdateData = (req, res) => {
+    const { classID, CourseID, TeacherID, Semester, Year } = req.body;//{ classID, CourseID, TeacherID, Semester, Year } this thing should be same as writing in the json body
+    const sql = 'UPDATE `classes` SET CourseID = ?, TeacherID = ?, Semester = ?, Year = ? WHERE classID = ?';
+    const value = [CourseID, TeacherID, Semester, Year, classID];
+    connect.query(sql, value, (err, result) => {
+        res.status(200).json({ message: 'updated successfully' });
+        console.log('updated successfully');
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Class not found' });
+        }
+    });
+}
+
+module.exports = { GetUserData, PostUserData, DeleteData, UpdateData }
+
+
+
+route.route("/insertinclass").post(PostUserData);
+route.route("/getuserdata").get(GetUserData);
+route.route("/deletedata/:classID").post(DeleteData);
+route.route("/updatedata").post(UpdateData);

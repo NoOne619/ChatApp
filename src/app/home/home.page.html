@@ -1,0 +1,19 @@
+
+  <ion-content [fullscreen]="true">
+   <ion-row>
+    <ion-col style="margin-top: 20px;text-align: center;" class="adjust" size="12" sizeMd="12">
+      <h1>LOGIN</h1>
+    </ion-col>
+    <ion-col style="margin-top: 40px;height: 60px;" class="adjust" sizeMd="6.5" size="12">
+      <input [(ngModel)]="this.input.email" style="border: solid 1px blue;" placeholder="username" type="text">
+    </ion-col>
+    <ion-col style="margin-top: 40px;height: 60px;" class="adjust" sizeMd="6.5" size="12">
+      <input [(ngModel)]="this.input.password" style="border: solid 1px blue;" placeholder="password" type="password">
+    </ion-col>
+   <ion-col style="margin-top: 50px;" class="adjust" size="6"sizeMd="6" ><ion-button (click)="submit()">LOGIN</ion-button></ion-col> 
+   </ion-row>
+
+    <h1></h1>
+  </ion-content>
+    
+

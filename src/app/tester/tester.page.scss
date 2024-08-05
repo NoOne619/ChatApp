@@ -1,0 +1,49 @@
+.media-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+
+  .media-box {
+    width: 100%;
+    height: 100%;
+
+    img, video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+  }
+
+  &:hover .media-box img, &:hover .media-box video {
+    transform: scale(1.1);
+  }
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.media-enlarged {
+  max-width: 90%;
+  max-height: 90%;
+
+  img, video {
+    width: 100%;
+    height: auto;
+  }
+}

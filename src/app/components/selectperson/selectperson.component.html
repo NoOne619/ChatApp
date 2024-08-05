@@ -1,0 +1,105 @@
+<ion-content #content>
+
+  <!-- this is for message box -->
+
+  <ion-row>
+    <ion-col size="12" sizeMd="12">
+      <ion-row>
+        <ion-col size="2" sizeMd="2">
+      <div   class="media-container">
+        <div *ngIf="!this.mediaFiles" [ngClass]="{'Nostatus':!this.mediaFiles}" class="media-box"
+          (click)="selectMedia(mediaFiles)" (click)="fileInputstatus.click()">
+          <img *ngIf="this.mediaFiles" [src]="mediaFiles" />
+
+          <input type="file" (change)="onFileChangedStatus($event)" #fileInputstatus style="display: none;" />
+
+        </div>
+
+        <div *ngIf="this.mediaFiles" class="media-box" (click)="selectMedia(mediaFiles)">
+          <img *ngIf="this.mediaFiles" [src]="mediaFiles" />
+        </div>
+
+       
+
+      </div>
+
+
+      <div class="overlay" *ngIf="selectedMedia" (click)="closeMedia()">
+        <div class="media-enlarged" (click)="$event.stopPropagation()">
+          <img  [src]="selectedMedia" />
+
+        </div>
+      </div>
+      <p>Your status</p>
+    </ion-col>
+    <ion-col  *ngFor="let stat of allstatus" size="2" sizeMd="2">
+      <div  *ngIf="stat.sender!=this.sender"  class="media-container">
+     
+        <div class="media-box" (click)="selectMedia(stat.file)" >            
+          <img  [src]="stat.file" />
+        </div>
+
+      </div>
+     <p *ngIf="stat.sender!=this.sender">{{stat.sender}} status</p> 
+    </ion-col>
+    </ion-row>
+    </ion-col>
+    <ion-col size="10" sizeMd="10" class="ion-text-center">
+      <h1>CHAT ROOM FOR {{this.sender.toUpperCase()}} &nbsp; AND &nbsp; {{this.receiver.toUpperCase()}}</h1>
+
+    </ion-col>
+  
+    <ion-col class="adjust heightOfchat" size="11" sizeMd="11">
+      <div #scrollMe class="scrollable-list">
+        <div *ngFor="let item of items; let index">
+          <ion-item
+            *ngIf=" (item.sender===this.receiver && item.receiver==this.sender)||(item.sender==this.sender&&item.receiver==this.receiver)"
+            class="item-container no-border">
+            <div
+              [ngClass]="{'left-bubble': (item.sender===this.receiver && item.receiver==this.sender) , 'right-bubble': (item.sender==this.sender&&item.receiver==this.receiver)}">
+              <h3 *ngIf="!item.filebool">{{ item.message }}</h3>
+              <p>{{ item.date | date: 'medium' }}</p>
+              <img
+                *ngIf="item.filebool && (item.message.includes('jpg') || item.message.includes('png') || item.message.includes('jpeg'))"
+                [src]="item.message" alt="Uploaded Image">
+              <video *ngIf="item.filebool && item.message.includes('mp4')" controls width="100%" height="100%">
+                <source [src]="item.message" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+              <audio *ngIf="item.filebool && item.message.includes('mp3')" controls>
+                <source [src]="item.message" type="audio/mpeg">
+                Your browser does not support the audio element.
+              </audio>
+            </div>
+          </ion-item>
+        </div>
+
+
+      </div>
+    </ion-col>
+    <ion-col offset="1" class="adjust inputheight" size="10" sizeMd="5">
+
+      <input [(ngModel)]="message" type="text">
+    </ion-col>
+    <ion-col class="adjust" size="10" sizeMd="6">
+      <ion-icon class="adjust" *ngIf="!recording" (click)="initiateRecording()" size="large"
+        name="mic-sharp"></ion-icon>
+      <ion-icon class="adjust" [ngClass]="{'Recording': recording}" class="black" *ngIf="recording"
+        (click)="stopRecording()" size="large" name="mic-sharp"></ion-icon>
+
+      <ion-icon class="adjust" size="large" name="camera" (click)="fileInput.click()"></ion-icon>
+      <input type="file" (change)="onFileChanged($event)" #fileInput style="display: none;" />
+      <ion-button class="adjust" class="padding" *ngIf="this.receiver" (click)="Send()">Send</ion-button>
+      <ion-button class="adjust" class="padding" (click)="Refresh()">Refresh</ion-button>
+      <ion-button class="adjust" class="padding" *ngFor="let client of clients;" (click)="Select(client)">
+        {{client}}
+      </ion-button>
+    </ion-col>
+    <ion-col class="adjust" size="8" sizeMd="6">
+      <ion-button class="logout" (click)="logout()">Logout</ion-button>
+    </ion-col>
+
+  </ion-row>
+
+
+</ion-content>
